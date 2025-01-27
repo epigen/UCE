@@ -30,7 +30,7 @@ from typing import Dict, List, Optional, Tuple
 from scanpy import AnnData
 
 
-from data_proc.gene_embeddings import load_gene_embeddings_adata
+from .gene_embeddings import load_gene_embeddings_adata
 
 def data_to_torch_X(X):
     if isinstance(X, sc.AnnData):
@@ -255,10 +255,8 @@ def get_species_to_pe(EMBEDDING_DIR):
             "macaca_fascicularis": EMBEDDING_DIR / 'Macaca_fascicularis.Macaca_fascicularis_6.0.gene_symbol_to_embedding_ESM2.pt',
             "macaca_mulatta": EMBEDDING_DIR / 'Macaca_mulatta.Mmul_10.gene_symbol_to_embedding_ESM2.pt',
         }
-    extra_species = pd.read_csv("./model_files/new_species_protein_embeddings.csv").set_index("species").to_dict()["path"]
-    embeddings_paths.update(extra_species) # adds new species
-    
-    
+    # extra_species = pd.read_csv("./model_files/new_species_protein_embeddings.csv").set_index("species").to_dict()["path"]
+    # embeddings_paths.update(extra_species) # adds new species
     
     species_to_pe = {
         species:torch.load(pe_dir) for species, pe_dir in embeddings_paths.items()   
