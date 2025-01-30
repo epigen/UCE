@@ -118,7 +118,12 @@ def anndata_to_sc_dataset(adata:sc.AnnData,
                                  hv_genes=None,
                                  embedding_model="ESM2",
                                 ) -> (SincleCellDataset, AnnData):
-    
+
+    # drop vars with no gene name and set gene_name as index
+    adata = adata[:, adata.var.gene_name != ""]
+    adata = adata[:, ~adata.var.gene_name.isna()]
+    adata.var.index = adata.var.gene_name
+
     # Subset to just genes we have embeddings for
     adata, protein_embeddings = load_gene_embeddings_adata(
         adata=adata,
