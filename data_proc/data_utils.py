@@ -107,7 +107,10 @@ def data_to_torch_X(X):
     if isinstance(X, sc.AnnData):
         X = X.X
     if not isinstance(X, np.ndarray):
-            X = X.toarray()
+        X = X.toarray()
+
+    if X.dtype == "uint32":
+        X = X.astype("float32")
     return torch.from_numpy(X).float()
 
 
