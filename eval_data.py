@@ -101,8 +101,8 @@ class MultiDatasetSentences(data.Dataset):
 
 
 class MultiDatasetSentenceCollator(object):
-    def __init__(self, args):
-        self.pad_length = args.pad_length
+    def __init__(self, pad_length):
+        self.pad_length = pad_length
 
     def __call__(self, batch):
         batch_size = len(batch)
@@ -115,15 +115,16 @@ class MultiDatasetSentenceCollator(object):
         i = 0
         max_len = 0
         for bs, msk, idx, seq_len, cs in batch:
-            batch_sentences[i, :] = bs
-            cell_sentences[i, :] = cs
+            batch_sentences[i, :] = bs[: self.pad_length]
+            cell_sentences[i, :] = cs[: self.pad_length]
             max_len = max(max_len, seq_len)
-            mask[i, :] = msk
+            mask[i, :] = msk[: self.pad_length]
             idxs[i] = idx
 
             i += 1
 
-        return batch_sentences[:, :max_len], mask[:, :max_len], idxs, cell_sentences
+        return batch_sentences, mask, idxs, cell_sentences
+        # return batch_sentences[:, :max_len], mask[:, :max_len], idxs, cell_sentences
 
 
 def sample_cell_sentences(
