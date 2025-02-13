@@ -115,10 +115,10 @@ class MultiDatasetSentenceCollator(object):
         i = 0
         max_len = 0
         for bs, msk, idx, seq_len, cs in batch:
-            batch_sentences[i, :] = bs[: self.pad_length]
-            cell_sentences[i, :] = cs[: self.pad_length]
+            batch_sentences[i, :] = bs[..., : self.pad_length]
+            cell_sentences[i, :] = cs[..., : self.pad_length]
             max_len = max(max_len, seq_len)
-            mask[i, :] = msk[: self.pad_length]
+            mask[i, :] = msk[..., : self.pad_length]
             idxs[i] = idx
 
             i += 1
