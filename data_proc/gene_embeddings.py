@@ -86,10 +86,17 @@ def load_gene_embeddings_adata(
         gene for gene in adata.var_names if gene.lower() in genes_with_embeddings
     }
 
+    assert len(genes_to_use) > 0, "No gene symbols with embeddings found in the data."
+    assert not all(
+        [gene.startswith("ENSG") for gene in genes_to_use]
+    ), "All genes within `genes_to_use` start with ENSG"
+
     # Subset data to only use genes with embeddings
     adata = adata[:, adata.var_names.isin(genes_to_use)]
 
-    adata.var.index = adata.var.gene_name  # This is a workaround necessary because anndata is bugy :(
+    adata.var.index = (
+        adata.var.gene_name
+    )  # This is a workaround necessary because anndata is bugy :(
 
     # Set up dictionary mapping species to gene embedding matrix (num_genes, embedding_dim)
     species_to_gene_embeddings = {
