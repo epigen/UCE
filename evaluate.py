@@ -223,7 +223,7 @@ def run_eval(adata, name, pe_idx_path, chroms_path, starts_path, shapes_dict,
                                     datasets_to_chroms_path=chroms_path,
                                     datasets_to_starts_path=starts_path
                                     )
-    multi_dataset_sentence_collator = MultiDatasetSentenceCollator(args)
+    multi_dataset_sentence_collator = MultiDatasetSentenceCollator(args.pad_length)
 
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False,
                             collate_fn=multi_dataset_sentence_collator,
